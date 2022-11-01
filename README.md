@@ -6,11 +6,12 @@
   - [Prerequisites for Configuration](#prerequisites)
     - [Create APIC Users for the Standalone ACI Endpoint Update App](#create-apic-users)
     - [Configure the Management Center Domains and Subdomains](#configure-fmc-domains)
-    - [Create management center Users for the Standalone ACI Endpoint Update App](#create-fmc-users)
+    - [Create Management Center Users for the Standalone ACI Endpoint Update App](#create-fmc-users)
   - [Configuration on the Standalone ACI Endpoint Update App](#configuration-on-the-app)
     - [Before you begin](#before-you-begin)
     - [Procedure](#procedure-of-config)
     - [Global and Device-Specific Options](#global-and-device-options)
+    - [JSON Configuration Reference](#json-configuration-reference)
     - [Disable Learning Reference](#disable-learning-reference)
 - [Security Notes](#security-notes)
 
@@ -55,7 +56,8 @@ The following task enables you to configure the Standalone ACI endpoint update a
 
 The following topics discuss prerequisite tasks you must complete before configuring the Standalone ACI Endpoint Update App.
 
-#### Create APIC Users for the Standalone ACI Endpoint Update App <a name="create-apic-users"></a>
+<a name="create-apic-users"></a>
+#### Create APIC Users for the Standalone ACI Endpoint Update App
 
 You must have(or create) a user for the Standalone ACI Endpoint Update App to read the endpoint information from specified domains/tenants:
 
@@ -70,7 +72,8 @@ You must have(or create) a user for the Standalone ACI Endpoint Update App to re
 > ***Step 4***    Verify the user has access to specific User Domain, and has at least Read Privilege.
 
 
-#### Configure the Management Center Domains and Subdomains <a name="configure-fmc-domains"></a>
+<a name="configure-fmc-domains"></a>
+#### Configure the Management Center Domains and Subdomains
 
 *This section applies to management center devices only.* ASA devices don't have domains.
 
@@ -104,7 +107,8 @@ In the ***FMC Domain Name*** field, enter a domain in the format domain1 \domain
 
 In the ***FMC Username*** field, enter the username of a user with privileges to update objects in the management center.
 
-#### Create management center Users for the Standalone ACI Endpoint Update App <a name="create-fmc-users"></a>
+<a name="create-fmc-users"></a>
+#### Create management center Users for the Standalone ACI Endpoint Update App
 
 You must create one dedicated management center user for the Standalone ACI Endpoint Update App to update network object and dynamic object configuration:
 
@@ -136,7 +140,8 @@ Both management center users must be administrators in the same domains.
 
 ---
 
-### Configuration on the Standalone ACI Endpoint Update App <a name="configuration-on-the-app"></a>
+<a name="configuration-on-the-app"></a>
+### Configuration on the Standalone ACI Endpoint Update App
 
 #### Before you begin <a name="before-you-begin"></a>
 
@@ -152,11 +157,12 @@ For more information about configuring APIC, see the chapter on Basic User Tenan
 
 Create one dedicated user with the Administrator role.
 
-For more information, see Create Users for the Standalone ACI Endpoint Update App.
+For more information, see [Create Management Center Users for the Standalone ACI Endpoint Update App](#create-fmc-users)
 
 (Optional.) Create domains on the Management Center as discussed in Configure the Management Center Domains and Subdomains.
 
-#### Procedure <a name="procedure-of-config"></a>
+<a name="procedure-of-config"></a>
+#### Procedure
 
 ---
 
@@ -204,6 +210,7 @@ For more information, see Create Users for the Standalone ACI Endpoint Update Ap
 
 * Click ![](./Media/Snapshots/config_device.jpg "Config Devices") > ***Add Device***.
 
+
   The following figure shows an example.
 
    ![](./Media/Snapshots/individual_site_menu.jpg "Add Target Device")
@@ -229,7 +236,9 @@ Enter or edit the following information.
 * After you’ve configured all your Management Centers or ASAs, click ***Submit***.
 
 ---
-#### Global and Device-Specific Options <a name="global-and-device-options"></a>
+
+<a name="global-and-device-options"></a>
+#### Global and Device-Specific Options
 
 * Test connectivity of APIC sites or target devices
 
@@ -241,8 +250,34 @@ The interval, in seconds, to update the Management Center or ASA. Default is 60.
 
 You can edit it by clicking ![](./Media/Snapshots/settings_menu.jpg "Settings").
 
+<a name="json-configuration-reference"></a>
+#### JSON Configuration Reference
 
-#### Disable Learning Reference <a name="disable-learning-reference"></a>
+You can optionally upload and download the ACI endpoint update app in JSON format. This might be useful to create a large configuration at once and then to back up that configuration later.
+
+All target devices from the current site are exported when you request it but for easier reading, the following formats are split between Management Center and ASA.
+
+Management Center:
+
+```
+{"interval":"value","site_prefix":"prefix","apic_ip":"host or ip","apic_username":"username","apic_password":"<hidden>","apic_status":"reachable","apic_certificate":"","ip_1":"host or ip","user_1":"username","password_1":"<hidden>","tenant_1":"tenant name","type_1":"FMC","networkgroup_1":true,
+"deploy_1":true|false,"status_1":"enabled|unreachable|Connectivity is not OK","domain_1":"name"}
+```
+
+ASA:
+
+```
+{"interval":"value","site_prefix":"prefix","apic_ip":"host or ip","apic_username":"username","apic_password":"<hidden>","apic_status":"reachable","apic_certificate":"","ip_1":"host or ip","user_1":"name","password_1":"<hidden>","tenant_1":"tenant name","type_1":"ASA","networkgroup_1":null,"deploy_1":null,
+"status_1":"enabled|reachable|Connectivity is OK","domain_1":null}
+```
+
+We recommend you download a configuration (even an empty one), edit the JSON file, then upload it.
+
+   ![](./Media/Snapshots/export_device_list.jpg "Export Device List")
+
+
+ <a name="disable-learning-reference"></a>
+#### Disable Learning Reference
 You can optionally clean up the APIC configuration pushed to the Management Center or ASA in the event any of the following occur:
 
 You remove the APIC application entirely.
@@ -261,13 +296,11 @@ The Management Center network object or ASA network object group is not deleted.
 
 The IP address is replaced by 127.0.0.1.
 
-
-## Security Notes <a name="security-notes"></a>
+<a name="security-notes"></a>
+## Security Notes
 
 * You should run the app in secure mode as you can to reduce security risk.
 
 * Use strong username/password to login to the hosting VM.
 
 * Hardening the hosting VM, including applying latest security patches, closing unused service ports etc.
-
-
