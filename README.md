@@ -4,9 +4,9 @@
 - [Installation Instructions](#instructions)
 - [Configure the Standalone ACI Endpoint Update App](#configuration-steps)
   - [Prerequisites for Configuration](#prerequisites)
-    - [Create APIC Users for the App](#create-apic-users)
+    - [Create APIC Users for the Standalone ACI Endpoint Update App](#create-apic-users)
     - [Configure the Management Center Domains and Subdomains](#configure-fmc-domains)
-    - [Create management center Users for the App](#create-fmc-users)
+    - [Create management center Users for the Standalone ACI Endpoint Update App](#create-fmc-users)
   - [Configuration on the Standalone ACI Endpoint Update App](#configuration-on-the-app)
     - [Before you begin](#before-you-begin)
     - [Procedure](#procedure-of-config)
@@ -17,7 +17,7 @@
 <a name="instructions"></a>
 ## Installation Instructions
 
-* Prepare hosting VM, for example, Ubuntu 20.04 or 22.04.
+* Prepare hosting VM, for example, Ubuntu 20.04 or 22.04. (Recommended CPU cores: 4 or more. Memory: 16GB or more.)
 
 * Download install_aci_app_3.0.tgz
 
@@ -48,14 +48,14 @@ For example, you may use ```./install_aci_app_3.0.sh -s``` to start the app in s
 <a name="configuration-steps"></a>
 ## Configure the Standalone ACI Endpoint Update App 
 
-The following task enables you to configure the Standalone ACI endpoint update app to communicate with the management center, ASA, and dynamic objects.
+The following task enables you to configure the Standalone ACI endpoint update app to communicate with APIC, Management Center, and ASA.
 
 <a name="prerequisites"></a>
 ### Prerequisites for Configuration
 
 The following topics discuss prerequisite tasks you must complete before configuring the Standalone ACI Endpoint Update App.
 
-#### Create APIC Users for the App <a name="create-apic-users"></a>
+#### Create APIC Users for the Standalone ACI Endpoint Update App <a name="create-apic-users"></a>
 
 You must have(or create) a user for the Standalone ACI Endpoint Update App to read the endpoint information from specified domains/tenants:
 
@@ -80,7 +80,7 @@ For more information about domains, see the chapter on domain management in the 
 
 ##### Create domains and subdomains
 
-Before you continue, make sure you have created all users, domains, and subdomains on the management center. Subdomain users must be created in the correct domain (System (system gear icon) > Users > Create User. If necessary, click Add Domain to add the user to the desired domain.)
+Before you continue, make sure you have created all users, domains, and subdomains on the management center. Subdomain users must be created in the correct domain (***System*** (![](./Media/Snapshots/system_gear.jpg "System Gears")) ***> Users > Create User***. If necessary, click Add Domain to add the user to the desired domain.)
 
 To create a domain on the management center:
 
@@ -104,15 +104,15 @@ In the ***FMC Domain Name*** field, enter a domain in the format domain1 \domain
 
 In the ***FMC Username*** field, enter the username of a user with privileges to update objects in the management center.
 
-#### Create management center Users for the App <a name="create-fmc-users"></a>
+#### Create management center Users for the Standalone ACI Endpoint Update App <a name="create-fmc-users"></a>
 
 You must create one dedicated management center user for the Standalone ACI Endpoint Update App to update network object and dynamic object configuration:
 
-The dedicated user is exclusively for the ACI endpoint update app to update the network object and dynamic object configuration
+The dedicated user is exclusively for the Standalone ACI Endpoint Update App to update the network object and dynamic object configuration
 
-In addition, you must have a second administative user that can be shared between the ACI endpoint update app and other management center functions. (This can be an existing user or a new user.)
+In addition, you must have a second administative user that can be shared between the Standalone ACI Endpoint Update App and other management center functions. (This can be an existing user or a new user.)
 
-Each management center user must have the Administrator role. Each ASA user must have privilege level 15. It's necessary to have to users to avoid the ACI endpoint update app logging out the administrator unexpectedly.
+Each management center user must have the Administrator role. Each ASA user must have privilege level 15. It's necessary to have to users to avoid the Standalone ACI Endpoint Update App logging out the administrator unexpectedly.
 
 The task that follows discusses how to create users on the management center only. To create ASA users, see the Cisco ASA Series General Operations ASDM Configuration Guide.
 
@@ -120,7 +120,7 @@ The task that follows discusses how to create users on the management center onl
 
 ---
 
-***Step 1***    Log in to the management center if you haven't done so already.
+***Step 1***    Log in to the Management Center if you haven't done so already.
 
 ***Step 2***    Click ***System > Users > Users***.
 
@@ -140,11 +140,11 @@ Both management center users must be administrators in the same domains.
 
 #### Before you begin <a name="before-you-begin"></a>
 
-Before you configure and use the ACI Endpoint Update App, complete all the following tasks:
+Before you configure and use the Standalone ACI Endpoint Update App, complete all the following tasks:
 
 Configure the APIC application at minimum with:
 
-A tenant for the management center or ASA
+A tenant for the Management Center or ASA
 
 In the tenant configuration, an application profile and an endpoint group (EPG)
 
@@ -152,9 +152,9 @@ For more information about configuring APIC, see the chapter on Basic User Tenan
 
 Create one dedicated user with the Administrator role.
 
-For more information, see Create Users for the ACI Endpoint Update App.
+For more information, see Create Users for the Standalone ACI Endpoint Update App.
 
-(Optional.) Create domains on the management center as discussed in Configure the Management Center Domains and Subdomains.
+(Optional.) Create domains on the Management Center as discussed in Configure the Management Center Domains and Subdomains.
 
 #### Procedure <a name="procedure-of-config"></a>
 
@@ -217,47 +217,47 @@ Enter or edit the following information.
 | ***Item***        | ***Description***           |
 | -------------     |-------------|
 | ***Tenant Name***      |Click the name of a tenant to which to add the device. (To select multiple tenants, hold down the Control key while clicking.) |
-| ***IP***      |Enter the management center's or ASA's IP address or fully-qualified host name. If your management center or ASA is behind a NAT device, separate the IP address from the port with a colon character; for example, 192.2.0.9:5001.      |
-| ***Username*** |Enter the user name of an management center or ASA user that is an Administrator in the domain (management center) or user context (ASA).      |
+| ***IP***      |Enter the Management Center's or ASA's IP address or fully-qualified host name. If your Management Center or ASA is behind a NAT device, separate the IP address from the port with a colon character; for example, 192.2.0.9:5001.      |
+| ***Username*** |Enter the user name of a Management Center or ASA user that is an Administrator in the domain (Management Center) or user context (ASA).      |
 | ***Password*** |Enter the user's password. |
 | ***Confirm Password***|Re-enter the user's password.|
-| ***Domain***|(Management Center only.)<br> Enter the alphanumeric username used by the app to sign in to the management center. The username must be different than the username you use to sign in to the management center. Otherwise, if they're the same, your sessions might get disconnected.<br> Enter the domain and subdomain name, if any, to which to push data. Domain names can consist of alphanumeric characters or the \ and / characters only. For more information, see Configure the Management Center Domains and Subdomains.|
-| ***Network Groups***|(Management Center only.) Check the box to deploy the network object configuration to the management center at the interval you select.<br>(Management Center only.) Uncheck the box if you don't want to push dynamic EPG data as network objects. Dynamic objects will be pushed to the configured management center if the management center version is 7.0 and later.|
-| ***Automatic Deploy***|Management Center Check the box to start an management center policy deployment after the app completes a periodic endpoint update. Consider disabling this option during periods of desired manual control of management center configuration, such as during a maintenance window for management center policy changes.|
+| ***Domain***|(Management Center only.)<br> Enter the alphanumeric username used by the app to sign in to the Management Center. The username must be different than the username you use to sign in to the Management Center. Otherwise, if they're the same, your sessions might get disconnected.<br> Enter the domain and subdomain name, if any, to which to push data. Domain names can consist of alphanumeric characters or the \ and / characters only. For more information, see Configure the Management Center Domains and Subdomains.|
+| ***Network Groups***|(Management Center only.) Check the box to deploy the network object configuration to the Management Center at the interval you select.<br>(Management Center only.) Uncheck the box if you don't want to push dynamic EPG data as network objects. Dynamic objects will be pushed to the configured Management Center if the Management Center version is 7.0 and later.|
+| ***Automatic Deploy***|Management Center Check the box to start a Management Center policy deployment after the app completes a periodic endpoint update. Consider disabling this option during periods of desired manual control of Management Center configuration, such as during a maintenance window for Management Center policy changes.|
 
 
-* After you’ve configured all your management centers or ASAs, click ***Submit***.
+* After you’ve configured all your Management Centers or ASAs, click ***Submit***.
 
 ---
 #### Global and Device-Specific Options <a name="global-and-device-options"></a>
 
-* Test connections to APIC sites or devices
+* Test connectivity of APIC sites or target devices
 
 You can test the connectivity to your configured APIC or target devices by clicking ![](./Media/Snapshots/test_conn.jpg "Test Connectivity"); sites or devices with connection issues have an orange background in the Status column.
 
 * Edit Update interval for each individual site
 
-The interval, in seconds, to update the management center or ASA. Default is 60. The minimum interval is 10 seconds because updating too frequently might negatively impact system performance with a large number of the management centers or ASA.
+The interval, in seconds, to update the Management Center or ASA. Default is 60. The minimum interval is 10 seconds because updating too frequently might negatively impact system performance with a large number of the Management Centers or ASA.
 
 You can edit it by clicking ![](./Media/Snapshots/settings_menu.jpg "Settings").
 
 
 #### Disable Learning Reference <a name="disable-learning-reference"></a>
-You can optionally clean up the APIC configuration pushed to the management center or ASA in the event any of the following occur:
+You can optionally clean up the APIC configuration pushed to the Management Center or ASA in the event any of the following occur:
 
 You remove the APIC application entirely.
 
-You move the APIC configuration to another management center or ASA.
+You move the APIC configuration to another Management Center or ASA.
 
-The ACI endpoint update app cleans up the management center object group configuration only for the site that is displayed in the app. No other configuration is removed either; for examle, if Domain1 is defined for Site 1 and Domain2 is defined for Site 2, if you clean the configuration of Site 2, Domain 1 is not affected.
+The ACI endpoint update app cleans up the Management Center object group configuration only for the site that is displayed in the app. No other configuration is removed either; for examle, if Domain1 is defined for Site 1 and Domain2 is defined for Site 2, if you clean the configuration of Site 2, Domain 1 is not affected.
 
-> Domains are supported on the management center only.
+> Domains are supported on the Management Center only.
 
-When disabling learning, check Erase all objects to erase the pushed object information on configured devices.To avoid configuration conflicts, we prevent pushing a new configuration to the management center or ASA at the same time as cleaning up an existing configuration.
+When disabling learning, check Erase all objects to erase the pushed object information on configured devices.To avoid configuration conflicts, we prevent pushing a new configuration to the Management Center or ASA at the same time as cleaning up an existing configuration.
 
-If the object group you clean up is used in any access control rule on the management center or ASA, the following happens:
+If the object group you clean up is used in any access control rule on the Management Center or ASA, the following happens:
 
-The management center network object or ASA network object group is not deleted.
+The Management Center network object or ASA network object group is not deleted.
 
 The IP address is replaced by 127.0.0.1.
 
