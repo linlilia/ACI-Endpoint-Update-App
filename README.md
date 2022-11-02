@@ -1,12 +1,12 @@
 # Standalone ACI-Endpoint-Update-App
 
-
+- [Installation Prerequisites](#prereq)
 - [Installation Instructions](#instructions)
 - [Configure the Standalone ACI Endpoint Update App](#configuration-steps)
   - [Prerequisites for Configuration](#prerequisites)
     - [Create APIC Users for the Standalone ACI Endpoint Update App](#create-apic-users)
-    - [Configure the Management Center Domains and Subdomains](#configure-fmc-domains)
-    - [Create Management Center Users for the Standalone ACI Endpoint Update App](#create-fmc-users)
+    - [Configure Secure Management Center Domains and Subdomains](#configure-fmc-domains)
+    - [Create Secure Management Center Users for the Standalone ACI Endpoint Update App](#create-fmc-users)
   - [Configuration on the Standalone ACI Endpoint Update App](#configuration-on-the-app)
     - [Before you begin](#before-you-begin)
     - [Procedure](#procedure-of-config)
@@ -15,25 +15,32 @@
     - [Disable Learning Reference](#disable-learning-reference)
 - [Security Notes](#security-notes)
 
+<a name="prereq"></a>
+## Installation Prerequisites
+
+* Set up a Ubuntu 20.04 or 22.04 virtual machine (VM)
+* Download and install `install_aci_app_3.0.tgz` on the VM
+
 <a name="instructions"></a>
 ## Installation Instructions
 
-* Prepare hosting VM, for example, Ubuntu 20.04 or 22.04. (Recommended CPU cores: 4 or more. Memory: 16GB or more.)
+1. Log in to your VM as a user with root privileges.
 
-* Download install_aci_app_3.0.tgz
-
-* Untar install_aci_app_3.0.tgz:
+2. Untar install_aci_app_3.0.tgz:
   
-   ```tar xzvf install_aci_app_3.0.tgz```
-
-   > You will find install_aci_app_3.0.sh under current directory.
-
-* Run install_aci_app_3.0.sh to start the app container, usage is as follows:
-
    ```
-  $ ./install_aci_app_3.0.sh
+   tar xzvf install_aci_app_3.0.tgz
+   ```
+
+   > You will find `install_aci_app_3.0.sh` under the current directory.
+
+3. Run `install_aci_app_3.0.sh` to start the app container as follows:
+  
+  ```
+  $ ./install_aci_app_3.0.sh  
+ ```
    
-     Usage Example:
+Usage Example:
    
      ./install_aci_app_3.0.sh    # print this usage help
    
@@ -42,14 +49,17 @@
      ./install_aci_app_3.0.sh -t # Test only, not recommended for production due to security reason. Configuration is accessible from any external host, e.g. http://<IP_of_this_host>:8000/configuration.json
    
      ./install_aci_app_3.0.sh -r # Run this to start an installed but exited ACI app container. Existing configuration would be kept.
-   ```
 
-For example, you may use ```./install_aci_app_3.0.sh -s``` to start the app in secure mode.
+For example, to start the app in secure mode:
+
+```
+./install_aci_app_3.0.sh -s
+```
 
 <a name="configuration-steps"></a>
 ## Configure the Standalone ACI Endpoint Update App 
 
-The following task enables you to configure the Standalone ACI endpoint update app to communicate with APIC, Management Center, and ASA.
+The following task enables you to configure the Standalone ACI endpoint update app to communicate with APIC, Secure Management Center, and ASA.
 
 <a name="prerequisites"></a>
 ### Prerequisites for Configuration
@@ -73,9 +83,9 @@ You must have(or create) a user for the Standalone ACI Endpoint Update App to re
 
 
 <a name="configure-fmc-domains"></a>
-#### Configure the Management Center Domains and Subdomains
+#### Configure Secure Management Center Domains and Subdomains
 
-*This section applies to management center devices only.* ASA devices don't have domains.
+*This section applies to secure management center devices only.* ASA devices don't have domains.
 
 Data in one APIC tenant is pushed and merged to one particular management center domain you configure. APIC does not modify or delete any other object in another management center domain. Note that objects defined in a domain are visible and usable in an management center's subdomains, and that can be a way to share an object across subdomains.
 
@@ -83,13 +93,13 @@ For more information about domains, see the chapter on domain management in the 
 
 ##### Create domains and subdomains
 
-Before you continue, make sure you have created all users, domains, and subdomains on the management center. Subdomain users must be created in the correct domain (***System*** (![](./Media/Snapshots/system_gear.jpg "System Gears")) ***> Users > Create User***. If necessary, click Add Domain to add the user to the desired domain.)
+Before you continue, make sure you have created all users, domains, and subdomains on the management center. Subdomain users must be created in the correct domain (***System*** ![](./Media/Snapshots/system_gear.jpg "System Gears")) ***> Users > Create User***. If necessary, click Add Domain to add the user to the desired domain.)
 
 To create a domain on the management center:
 
 Log in to the management center.
 
-Click ***System*** (![](./Media/Snapshots/system_gear.jpg "System Gears")) ***> Domains > Add Domain***.
+Click ***System*** ![](./Media/Snapshots/system_gear.jpg "System Gears")) ***> Domains > Add Domain***.
 
 Enter the required information.
 
@@ -103,20 +113,20 @@ When you add a target device in the Standalone ACI Endpoint Update App:
 
 Enter a username only to push and merge the configuration to the default Global domain on the management center.
 
-In the ***FMC Domain Name*** field, enter a domain in the format domain1 \domain2 to get dynamic data from the tenant and access the management center and update the objects of the subdomain named domain1 \domain2 of the Global domain..
+In the ***FMC Domain Name*** field, enter a domain in the format `domain1\domain2` to get dynamic data from the tenant and access the management center and update the objects of the subdomain named domain1 \domain2 of the Global domain.
 
 In the ***FMC Username*** field, enter the username of a user with privileges to update objects in the management center.
 
 <a name="create-fmc-users"></a>
-#### Create management center Users for the Standalone ACI Endpoint Update App
+#### Create secure management center Users for the Standalone ACI Endpoint Update App
 
-You must create one dedicated management center user for the Standalone ACI Endpoint Update App to update network object and dynamic object configuration:
+You must create one dedicated secure management center user for the Standalone ACI Endpoint Update App to update network object and dynamic object configuration:
 
 The dedicated user is exclusively for the Standalone ACI Endpoint Update App to update the network object and dynamic object configuration
 
 In addition, you must have a second administative user that can be shared between the Standalone ACI Endpoint Update App and other management center functions. (This can be an existing user or a new user.)
 
-Each management center user must have the Administrator role. Each ASA user must have privilege level 15. It's necessary to have to users to avoid the Standalone ACI Endpoint Update App logging out the administrator unexpectedly.
+Each secure management center user must have the Administrator role. Each ASA user must have privilege level 15. It's necessary to have to users to avoid the Standalone ACI Endpoint Update App logging out the administrator unexpectedly.
 
 The task that follows discusses how to create users on the management center only. To create ASA users, see the Cisco ASA Series General Operations ASDM Configuration Guide.
 
@@ -124,7 +134,7 @@ The task that follows discusses how to create users on the management center onl
 
 ---
 
-***Step 1***    Log in to the Management Center if you haven't done so already.
+***Step 1***    Log in to the Secure Management Center if you haven't done so already.
 
 ***Step 2***    Click ***System > Users > Users***.
 
@@ -134,7 +144,7 @@ The task that follows discusses how to create users on the management center onl
 
 ***Step 5***    (Optional.) Click ***Add Domain*** to give the user access to a particular domain.
 
-Both management center users must be administrators in the same domains.
+Both secure management center users must be administrators in the same domains.
 
 ***Step 6***    Enter the other information required to configure the user; consult the online help for assistance.
 
@@ -147,9 +157,7 @@ Both management center users must be administrators in the same domains.
 
 Before you configure and use the Standalone ACI Endpoint Update App, complete all the following tasks:
 
-Configure the APIC application at minimum with:
-
-A tenant for the Management Center or ASA
+Configure the APIC application at minimum with a tenant for the Secure Management Center or ASA.
 
 In the tenant configuration, an application profile and an endpoint group (EPG)
 
@@ -159,7 +167,7 @@ Create one dedicated user with the Administrator role.
 
 For more information, see [Create Management Center Users for the Standalone ACI Endpoint Update App](#create-fmc-users)
 
-(Optional.) Create domains on the Management Center as discussed in Configure the Management Center Domains and Subdomains.
+(Optional.) Create domains on the Secure Management Center as discussed in Configure the Management Center Domains and Subdomains.
 
 <a name="procedure-of-config"></a>
 #### Procedure
@@ -170,7 +178,7 @@ For more information, see [Create Management Center Users for the Standalone ACI
 
    ```http://localhost:8000/configuration.json```
   
-  You would see the main page, All Sites page.
+  The All Sites page is displayed.
 
 ***Step 2***    Configure APIC Sites
 
@@ -202,7 +210,7 @@ For more information, see [Create Management Center Users for the Standalone ACI
   ![](./Media/Snapshots/all_sites_after_adding_sites.jpg "After adding sites")
 
 
-***Step 3***    Configure Target Devices on Individual APIC Sites
+***Step 3***    Configure Target Devices on individual APIC Site
 
 
 * Click the site name to enter individual site configuration page
@@ -233,7 +241,11 @@ Enter or edit the following information.
 | ***Automatic Deploy***|Management Center Check the box to start a Management Center policy deployment after the app completes a periodic endpoint update. Consider disabling this option during periods of desired manual control of Management Center configuration, such as during a maintenance window for Management Center policy changes.|
 
 
-* After you’ve configured all your Management Centers or ASAs, click ***Submit***.
+* After you’ve configured all your Secure Management Centers or ASAs, click ***Submit***.
+
+  The following figure shows an example.
+
+   ![](./Media/Snapshots/individual_site_target_devices.jpg "Target Devices")
 
 ---
 
@@ -243,6 +255,10 @@ Enter or edit the following information.
 * Test connectivity of APIC sites or target devices
 
 You can test the connectivity to your configured APIC or target devices by clicking ![](./Media/Snapshots/test_conn.jpg "Test Connectivity"); sites or devices with connection issues have an orange background in the Status column.
+
+  The following figure shows an example on a target device:
+
+  ![](./Media/Snapshots/enabled_device_orange.jpg "Connectivity Status")
 
 * Edit Update interval for each individual site
 
@@ -301,6 +317,6 @@ The IP address is replaced by 127.0.0.1.
 
 * You should run the app in secure mode as you can to reduce security risk.
 
-* Use strong username/password to login to the hosting VM.
+* Use a strong username/password to login to the hosting VM.
 
-* Hardening the hosting VM, including applying latest security patches, closing unused service ports etc.
+* Hardening the hosting VM, including applying the latest security patches, closing unused service ports etc.
