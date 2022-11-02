@@ -1,6 +1,6 @@
 # Standalone ACI-Endpoint-Update-App
 
-- [Installation Prerequisites](#prereq)
+- [Installation Prerequisites](#orereq)
 - [Installation Instructions](#instructions)
 - [Configure the Standalone ACI Endpoint Update App](#configuration-steps)
   - [Prerequisites for Configuration](#prerequisites)
@@ -93,13 +93,13 @@ For more information about domains, see the chapter on domain management in the 
 
 ##### Create domains and subdomains
 
-Before you continue, make sure you have created all users, domains, and subdomains on the management center. Subdomain users must be created in the correct domain (***System*** ![](./Media/Snapshots/system_gear.jpg "System Gears")) ***> Users > Create User***. If necessary, click Add Domain to add the user to the desired domain.)
+Before you continue, make sure you have created all users, domains, and subdomains on the management center. Subdomain users must be created in the correct domain (***System*** (./Media/Snapshots/system_gear.jpg "System Gears")) ***> Users > Create User***. If necessary, click Add Domain to add the user to the desired domain.)
 
 To create a domain on the management center:
 
 Log in to the management center.
 
-Click ***System*** ![](./Media/Snapshots/system_gear.jpg "System Gears")) ***> Domains > Add Domain***.
+Click ***System*** (./Media/Snapshots/system_gear.jpg "System Gears")) ***> Domains > Add Domain***.
 
 Enter the required information.
 
@@ -182,7 +182,7 @@ For more information, see [Create Management Center Users for the Standalone ACI
 
 ***Step 2***    Configure APIC Sites
 
-* Click ![](./Media/Snapshots/config_device.jpg "Config Devices") > ***Add Site***.
+* Click (./Media/Snapshots/config_device.jpg "Config Devices") > ***Add Site***.
   
   
   The following figure shows an example.
@@ -210,7 +210,7 @@ For more information, see [Create Management Center Users for the Standalone ACI
   ![](./Media/Snapshots/all_sites_after_adding_sites.jpg "After adding sites")
 
 
-***Step 3***    Configure Target Devices on individual APIC Site
+***Step 3***    Configure Target Devices on Individual APIC Sites
 
 
 * Click the site name to enter individual site configuration page
@@ -243,10 +243,6 @@ Enter or edit the following information.
 
 * After you’ve configured all your Secure Management Centers or ASAs, click ***Submit***.
 
-  The following figure shows an example.
-
-   ![](./Media/Snapshots/individual_site_target_devices.jpg "Target Devices")
-
 ---
 
 <a name="global-and-device-options"></a>
@@ -255,10 +251,6 @@ Enter or edit the following information.
 * Test connectivity of APIC sites or target devices
 
 You can test the connectivity to your configured APIC or target devices by clicking ![](./Media/Snapshots/test_conn.jpg "Test Connectivity"); sites or devices with connection issues have an orange background in the Status column.
-
-  The following figure shows an example on a target device:
-
-  ![](./Media/Snapshots/enabled_device_orange.jpg "Connectivity Status")
 
 * Edit Update interval for each individual site
 
@@ -317,6 +309,6 @@ The IP address is replaced by 127.0.0.1.
 
 * You should run the app in secure mode as you can to reduce security risk.
 
-* Use a strong username/password to login to the hosting VM.
+* Use strong username/password to login to the hosting VM.
 
-* Hardening the hosting VM, including applying the latest security patches, closing unused service ports etc.
+* Hardening the hosting VM, including applying latest security patches, closing unused service ports etc.
